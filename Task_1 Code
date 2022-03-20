@@ -1,0 +1,79 @@
+
+def register():
+    db = open("Task_DB.txt","r")
+    username = input("Create username : ")
+    password = input("Create password : ")
+    password1 = input("Confirm password : ")
+    u = []
+    p = []
+    for i in db:
+        a,b = i.split(", ")
+        b = b.strip()
+        u.append(a)
+        p.append(b)
+    data = dict (zip(u,p))
+
+    import re
+    regex = '^[A-Za-z0-9]+[\._]?[A-Za-z0-9]+[@]\w+[.]\w{2,3}$'
+    if password != password1:
+        print("Password don't match, restart")
+        register()
+    elif len(password) <= 8:
+        print("password too short , restart:")
+        register()
+    elif username in u:
+        print("username exists")
+        register()
+        if (re.search(regex, username)):
+            pass
+        else:
+            print("Invalid Email")
+    elif "@" not in username:
+        print("Username should be email .id")
+        register()
+    else:
+        db = open("Task_DB.txt","a")
+        db.write(username + ", "+password+"\n")
+        print("Success!")
+
+def access():
+    db = open("Task_DB.txt","r")
+    username = input("Enter your username")
+    password = input("Enter your password")
+
+    if not len(username or password)<1:
+        u = []
+        p = []
+        for i in db:
+            a, b = i.split(", ")
+            b = b.strip()
+            u.append(a)
+            p.append(b)
+        data = dict(zip(u, p))
+
+        try:
+            if data[username]:
+                try:
+                    if password == data[username]:
+                        print("Login Success")
+                        print("Hi, ", username)
+                    else:
+                        print("Password or Username incorrect")
+                except:
+                    print("incorrect password or username")
+            else:
+                print("Username doesn't exist")
+        except:
+            print("Username or password doesn't exist")
+    else:
+        print("please Enter valid credentials")
+
+def home(option=None):
+    option = input("Login | Signup:")
+    if option=="Login":
+        access()
+    elif option == "Singup":
+        register()
+    else:
+        print("Please entry an option")
+home()
